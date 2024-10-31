@@ -10,10 +10,10 @@ import json
 load_dotenv()
 
 #Atribuindo configurações e setando variaveis
-prod1 = os.getenv['prod1']
-prod2 = os.getenv['prod2']
-dev1 = os.getenv['dev1']
-dev2 = os.getenv['dev2']
+prod1 = str(os.getenv["prod1"])
+prod2 = str(os.getenv["prod2"])
+dev1 = str(os.getenv["dev1"])
+dev2 = str(os.getenv["dev2"])
 
 hoje = date.today()
 timestampa = str(hoje)+"_"+str(datetime.now().strftime('%Hh%Mm%Ss'))
@@ -41,7 +41,7 @@ log.write("Execução dia "+timestampa)
 #Lendo arquivo de config
 with open(os.path.dirname(__file__)+"/config/config.json", 'r') as file:
     configs = json.load(file)
-    
+
 #Lendo em quais ambientes o programa será executado
 if configs['rodaPrd'] == "S" and configs['rodaDev'] == "S":
     ambs = ["prd","dev"]
