@@ -5,9 +5,9 @@ name: PipelineRPA
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "prd" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "prd" ]
 
 
 jobs:
@@ -19,5 +19,5 @@ jobs:
     - name: Sobe do github para a aws
       run: |
             echo "${{secrets.AWS_RPA_INTER}}" >private_key && chmod 600 private_key
-            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-35-172-89-76.compute-1.amazonaws.com "
-            cd RpaInterdisciplinar/;git pull;"
+            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-54-166-231-213.compute-1.amazonaws.com "
+            cd RepRpaInter/;git pull;"
