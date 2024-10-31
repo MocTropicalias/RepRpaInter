@@ -13,7 +13,8 @@ CREATE TABLE tb_usuario
  deletedAt DATE,  
  fk_id_endereco INT,
  updatedAt date,
- var_id_firebase varchar
+ var_id_firebase varchar,
+ var_role varchar default 'USER'
 );
 
 CREATE TABLE tb_venda_anuncio 

@@ -1,17 +1,18 @@
 CREATE TABLE tb_usuario (
 	pk_int_id_usuario SERIAL PRIMARY KEY,  
 	text_foto VARCHAR(255),  
-	var_email VARCHAR(100) NOT NULL CHECK (var_email ~ '^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$'),
-	var_senha VARCHAR(50) CHECK (LENGTH(var_senha) >= 8),
+	var_email VARCHAR(100) NOT NULL,
+	var_senha CHECK (LENGTH(var_senha) >= 8),
 	var_user_name VARCHAR(50),  
 	dt_nascimento DATE CHECK (dt_nascimento < CURRENT_DATE), 
 	var_descricao_usuario VARCHAR(255),  
 	var_cpf VARCHAR(11) CHECK (var_cpf ~ '^[0-9]{11}$'),
-	var_nome VARCHAR(50),  
+	var_nome VARCHAR,  
 	createdAt DATE DEFAULT CURRENT_DATE, 
 	deletedAt DATE,  
 	fk_int_id_endereco INT,  
-	updateAt DATE DEFAULT CURRENT_DATE
+	updateAt DATE,
+	var_role VARCHAR default 'USER'
 ); 
 
 CREATE TABLE tb_anuncio ( 
@@ -25,7 +26,7 @@ CREATE TABLE tb_anuncio (
 	deletedAt DATE,  
 	createdAt DATE DEFAULT CURRENT_DATE,  
 	fk_int_id_usuario INT,  
-	updateAt DATE DEFAULT CURRENT_DATE 
+	updateAt DATE 
 ); 
 
 CREATE TABLE tb_endereco ( 
@@ -38,7 +39,7 @@ CREATE TABLE tb_endereco (
 	int_num_casa INT CHECK (int_num_casa > 0), 
 	createdAt DATE DEFAULT CURRENT_DATE,  
 	deletedAt DATE,  
-	updateAt DATE DEFAULT CURRENT_DATE 
+	updateAt DATE 
 ); 
 
 CREATE TABLE tb_mascote ( 
@@ -48,7 +49,7 @@ CREATE TABLE tb_mascote (
 	deletedAt DATE,  
 	fk_int_id_cor_mascote INT,  
 	fk_int_id_usuario INT,  
-	updateAt DATE DEFAULT CURRENT_DATE 
+	updateAt DATE 
 ); 
 
 CREATE TABLE tb_cor_mascote ( 
@@ -58,7 +59,7 @@ CREATE TABLE tb_cor_mascote (
 	deletedAt DATE,  
 	text_secundaria VARCHAR(50),  
 	text_primaria VARCHAR(50),  
-	updateAt DATE DEFAULT CURRENT_DATE
+	updateAt DATE
 ); 
 
 CREATE TABLE tb_follow ( 
@@ -66,7 +67,7 @@ CREATE TABLE tb_follow (
 	dt_data DATE,  
 	createdAt DATE DEFAULT CURRENT_DATE,  
 	deletedAt DATE,  
-	updateAt DATE DEFAULT CURRENT_DATE,  
+	updateAt DATE,  
 	fk_int_id_seguidor INT,  
 	fk_int_id_seguindo INT  
 ); 
@@ -81,7 +82,7 @@ CREATE TABLE tb_evento (
 	deletedAt DATE,  
 	pk_int_id_evento SERIAL PRIMARY KEY,  
 	fk_int_id_usuario INT,  
-	updateAt DATE DEFAULT CURRENT_DATE
+	updateAt DATE
 ); 
 
 CREATE TABLE tb_ticket ( 
@@ -91,7 +92,7 @@ CREATE TABLE tb_ticket (
 	deletedAt DATE,  
 	fk_int_id_usuario INT,  
 	fk_int_id_evento INT,  
-	updateAt DATE DEFAULT CURRENT_DATE
+	updateAt DATE
 ); 
 
 CREATE TABLE tb_venda_evento ( 
@@ -101,7 +102,7 @@ CREATE TABLE tb_venda_evento (
 	deletedAt DATE,  
 	fk_int_id_barraca INT,  
 	fk_int_id_usuario INT,  
-	updateAt DATE DEFAULT CURRENT_DATE
+	updateAt DATE
 ); 
 
 CREATE TABLE tb_barraca ( 
@@ -110,7 +111,7 @@ CREATE TABLE tb_barraca (
 	createdAt DATE DEFAULT CURRENT_DATE,  
 	deletedAt DATE,  
 	fk_int_id_evento INT,  
-	updateAt DATE DEFAULT CURRENT_DATE  
+	updateAt DATE  
 ); 
 
 ALTER TABLE tb_usuario ADD FOREIGN KEY(fk_int_id_endereco) REFERENCES tb_endereco (pk_int_id_endereco);
@@ -125,3 +126,6 @@ ALTER TABLE tb_ticket ADD FOREIGN KEY(fk_int_id_evento) REFERENCES tb_evento (pk
 ALTER TABLE tb_venda_evento ADD FOREIGN KEY(fk_int_id_barraca) REFERENCES tb_barraca (pk_int_id_barraca);
 ALTER TABLE tb_venda_evento ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
 ALTER TABLE tb_barraca ADD FOREIGN KEY(fk_int_id_evento) REFERENCES tb_evento (pk_int_id_evento);
+
+
+insert into tb_cor_mascote(pk_int_id_cor_mascote, text_primaria, text_secundaria, text_fundo, createdAt) values(0,'006996','E45F15','32B6F4',current_date-1);
