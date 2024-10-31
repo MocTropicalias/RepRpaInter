@@ -1,0 +1,64 @@
+Execução dia 2024-10-27_13h42m33s
+ - 13:42:33 - Executando no ambiente de DEV
+
+==============================
+
+
+dev - 13:42:33 - Processo no banco dev
+dev - 13:42:33 - Conectando no banco do 1°
+dev - 13:42:34 - Conectando no banco do 2°
+
+
+dev - 13:42:35 - Passando novos registros do banco do 1° para o banco do 2°
+
+
+dev - 13:42:35 - Obtendo dados da tabela tb_cor_mascote
+dev - 13:42:36 - Nenhum novo registro encontrado
+
+
+dev - 13:42:36 - Obtendo dados da tabela tb_evento
+dev - 13:42:36 - Nenhum novo registro encontrado
+
+
+dev - 13:42:36 - Obtendo dados da tabela tb_barraca
+dev - 13:42:36 - Nenhum novo registro encontrado
+
+==============================
+
+
+dev - 13:42:36 - Passando registros alterados no banco do 1° para o banco do 2°
+
+
+dev - 13:42:36 - Obtendo dados da tabela tb_cor_mascote
+dev - 13:42:36 - Nenhum dado alterado encontrado
+
+
+dev - 13:42:36 - Obtendo dados da tabela tb_evento
+dev - 13:42:36 - Nenhum dado alterado encontrado
+
+
+dev - 13:42:36 - Obtendo dados da tabela tb_barraca
+dev - 13:42:37 - Nenhum dado alterado encontrado
+
+==============================
+
+
+
+
+dev - 13:42:37 - Passando novos registros do banco do 2° para o banco do 1°
+
+
+dev - 13:42:37 - Obtendo dados da tabela tb_endereco
+dev - 13:42:37 - Nenhum novo registro encontrado
+
+
+dev - 13:42:37 - Obtendo dados da tabela tb_usuario
+
+dev ERRO! - 13:42:37 - date too large (after year 10K): '20006-09-17'
+
+
+dev - 13:42:37 - Conexão banco 1° encerrada
+dev - 13:42:37 - Conexão banco 2° encerrada
+
+==============================
+

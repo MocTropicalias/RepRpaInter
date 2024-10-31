@@ -1,0 +1,1399 @@
+CREATE TABLE tb_usuario 
+( 
+ pk_int_id_usuario serial PRIMARY KEY,
+ var_foto VARCHAR,  
+ var_email VARCHAR,  
+ var_senha VARCHAR,  
+ var_user_name VARCHAR,  
+ dt_nascimento DATE,  
+ var_descricao_usuario VARCHAR,  
+ var_cpf VARCHAR,  
+ var_nome VARCHAR,  
+ createdAt DATE,  
+ deletedAt DATE,  
+ fk_id_endereco INT,
+ updatedAt date,
+ var_id_firebase varchar
+);
+
+CREATE TABLE tb_venda_anuncio 
+( 
+ var_nota_fiscal VARCHAR,  
+ dt_data DATE,  
+ num_valor INT,  
+ var_produto VARCHAR,  
+ int_quantidade INT,  
+ pk_int_id_venda_anuncio serial PRIMARY KEY,  
+ deletedAt DATE,  
+ createdAt DATE,  
+ fk_int_id_usuario INT,  
+ updatedAt date,
+ fk_int_id_status_venda INT
+); 
+
+CREATE TABLE tb_endereco 
+( 
+ var_cep VARCHAR,  
+ var_rua VARCHAR,  
+ var_cidade VARCHAR,  
+ pk_int_id_endereco serial PRIMARY KEY,  
+ var_complemento VARCHAR,  
+ int_num_casa INT,  
+ createdAt DATE,  
+ deletedAt DATE,  
+ updatedAt date,
+ fk_int_id_estado INT  
+); 
+
+CREATE TABLE tb_mascote 
+( 
+ pk_int_id_mascote serial PRIMARY KEY,  
+ createdAt DATE,  
+ deletedAt DATE,  
+ var_nome VARCHAR,  
+ fk_int_id_usuario INT,  
+ updatedAt date,
+ fk_int_id_cor_araci INT  
+); 
+
+CREATE TABLE tb_follow 
+( 
+ pk_int_id_follow serial PRIMARY KEY,  
+ fk_int_id_seguidor INT,  
+ fk_int_id_seguido INT,  
+ createdAt DATE,  
+ updatedAt date,
+ deletedAt DATE  
+); 
+
+CREATE TABLE tb_evento 
+( 
+ dt_data_inicio DATE,  
+ var_nome VARCHAR,  
+ var_local VARCHAR,  
+ float_preco_ticket FLOAT,  
+ createdAt DATE,  
+ deletedAt DATE,  
+ pk_int_id_evento serial PRIMARY KEY,  
+ dt_data_final DATE,  
+ updatedAt date,
+ fk_int_id_usuario INT  
+); 
+
+CREATE TABLE tb_ticket 
+( 
+ int_quant INT,  
+ pk_int_id_ticket serial PRIMARY KEY,  
+ createdAt DATE,  
+ deletedAt DATE,  
+ fk_int_id_usuario INT,  
+ updatedAt date,
+ fk_int_id_evento INT  
+); 
+
+CREATE TABLE tb_venda_evento 
+( 
+ pk_int_id_venda_evento serial PRIMARY KEY,  
+ num_valor INT,  
+ createdAt DATE,  
+ deletedAt DATE,  
+ fk_int_id_barraca INT,  
+ updatedAt date,
+ fk_int_id_usuario INT  
+); 
+
+CREATE TABLE tb_barraca 
+( 
+ pk_int_id_barraca serial PRIMARY KEY,  
+ var_nome VARCHAR,  
+ int_num_tickets INT,  
+ createdAt DATE,  
+ updatedAt date,
+ deletedAt DATE,  
+ fk_int_id_evento INT  
+); 
+
+CREATE TABLE tb_estado 
+( 
+ pk_int_id_estado serial PRIMARY KEY,  
+ var_estado VARCHAR,
+ createdAt DATE,  
+ updatedAt date,
+ deletedAt DATE
+); 
+
+CREATE TABLE tb_status_venda 
+( 
+ pk_int_id_status_venda serial PRIMARY KEY,  
+ var_status_venda VARCHAR,
+ createdAt DATE,  
+ updatedAt date,
+ deletedAt DATE
+); 
+
+CREATE TABLE tb_cor_araci 
+( 
+ pk_int_id_cor_araci serial PRIMARY KEY,  
+ var_primaria VARCHAR,  
+ var_secundaria VARCHAR,  
+ var_fundo VARCHAR,
+ updatedAt date,
+ createdAt DATE,  
+ deletedAt DATE
+); 
+
+ALTER TABLE tb_usuario ADD FOREIGN KEY(fk_id_endereco) REFERENCES tb_endereco (pk_int_id_endereco);
+ALTER TABLE tb_venda_anuncio ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
+ALTER TABLE tb_venda_anuncio ADD FOREIGN KEY(fk_int_id_status_venda) REFERENCES tb_status_venda (pk_int_id_status_venda);
+ALTER TABLE tb_endereco ADD FOREIGN KEY(fk_int_id_estado) REFERENCES tb_estado (pk_int_id_estado);
+ALTER TABLE tb_mascote ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
+ALTER TABLE tb_mascote ADD FOREIGN KEY(fk_int_id_cor_araci) REFERENCES tb_cor_araci (pk_int_id_cor_araci);
+ALTER TABLE tb_follow ADD FOREIGN KEY(fk_int_id_seguido) REFERENCES tb_usuario (pk_int_id_usuario);
+ALTER TABLE tb_evento ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
+ALTER TABLE tb_ticket ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
+ALTER TABLE tb_ticket ADD FOREIGN KEY(fk_int_id_evento) REFERENCES tb_evento (pk_int_id_evento);
+ALTER TABLE tb_venda_evento ADD FOREIGN KEY(fk_int_id_barraca) REFERENCES tb_barraca (pk_int_id_barraca);
+ALTER TABLE tb_venda_evento ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
+ALTER TABLE tb_barraca ADD FOREIGN KEY(fk_int_id_evento) REFERENCES tb_evento (pk_int_id_evento);
+
+CREATE OR REPLACE FUNCTION trf_createdAt_usuario()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_usuario set createdat = current_date where pk_int_id_usuario = new.pk_int_id_usuario;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_usuario
+  after insert
+  ON tb_usuario
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_usuario();
+;
+
+CREATE OR REPLACE FUNCTION trf_createdAt_cor_araci()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_cor_araci set createdat = current_date where pk_int_id_cor_araci = new.pk_int_id_cor_araci;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_cor_araci
+  after insert
+  ON tb_cor_araci
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_cor_araci();
+;
+
+CREATE OR REPLACE FUNCTION trf_createdAt_endereco()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_endereco set createdat = current_date where pk_int_id_endereco = new.pk_int_id_endereco;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_endereco
+  after insert
+  ON tb_endereco
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_endereco();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_estado()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_estado set createdat = current_date where pk_int_id_estado = new.pk_int_id_estado;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_estado
+  after insert
+  ON tb_estado
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_estado();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_evento set createdat = current_date where pk_int_id_evento = new.pk_int_id_evento;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_evento
+  after insert
+  ON tb_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_evento();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_follow()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_follow set createdat = current_date where pk_int_id_follow = new.pk_int_id_follow;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_follow
+  after insert
+  ON tb_follow
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_follow();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_mascote()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_mascote set createdat = current_date where pk_int_id_mascote = new.pk_int_id_mascote;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_mascote
+  after insert
+  ON tb_mascote
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_mascote();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_status_venda()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_status_venda set createdat = current_date where pk_int_id_status_venda = new.pk_int_id_status_venda;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_status_venda
+  after insert
+  ON tb_status_venda
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_status_venda();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_barraca()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_barraca set createdat = current_date where pk_int_id_barraca = new.pk_int_id_barraca;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_barraca
+  after insert
+  ON tb_barraca
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_barraca();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_venda_anuncio()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_venda_anuncio set createdat = current_date where pk_int_id_venda_anuncio = new.pk_int_id_venda_anuncio;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_venda_anuncio
+  after insert
+  ON tb_venda_anuncio
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_venda_anuncio();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_venda_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_venda_evento set createdat = current_date where pk_int_id_venda_evento = new.pk_int_id_venda_evento;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_venda_evento
+  after insert
+  ON tb_venda_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_venda_evento();
+
+CREATE OR REPLACE FUNCTION trf_createdAt_ticket()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	update tb_ticket set createdat = current_date where pk_int_id_ticket = new.pk_int_id_ticket;
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_createdAt_ticket
+  after insert
+  ON tb_ticket
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_createdAt_ticket();
+
+create table tb_log_usuario(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_usuario()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_usuario(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_usuario
+  after insert
+  ON tb_usuario
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_usuario();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_usuario()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_usuario(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_usuario
+  after update
+  ON tb_usuario
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_usuario();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_usuario()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_usuario(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_usuario
+  after delete
+  ON tb_usuario
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_usuario();
+;
+
+create table tb_log_barraca(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_barraca()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_barraca(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_barraca
+  after insert
+  ON tb_barraca
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_barraca();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_barraca()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_barraca(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_barraca
+  after update
+  ON tb_barraca
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_barraca();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_barraca()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_barraca(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_barraca
+  after delete
+  ON tb_barraca
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_barraca();
+;
+
+create table tb_log_cor_araci(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_cor_araci()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_cor_araci(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_cor_araci
+  after insert
+  ON tb_cor_araci
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_cor_araci();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_cor_araci()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_cor_araci(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_cor_araci
+  after update
+  ON tb_cor_araci
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_cor_araci();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_cor_araci()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_cor_araci(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_cor_araci
+  after delete
+  ON tb_cor_araci
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_cor_araci();
+;
+
+create table tb_log_endereco(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_endereco()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_endereco(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_endereco
+  after insert
+  ON tb_endereco
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_endereco();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_endereco()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_endereco(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_endereco
+  after update
+  ON tb_endereco
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_endereco();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_endereco()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_endereco(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_endereco
+  after delete
+  ON tb_endereco
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_endereco();
+;
+
+create table tb_log_estado(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_estado()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_estado(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_estado
+  after insert
+  ON tb_estado
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_estado();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_estado()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_estado(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_estado
+  after update
+  ON tb_estado
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_estado();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_estado()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_estado(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_estado
+  after delete
+  ON tb_estado
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_estado();
+;
+
+create table tb_log_evento(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_evento(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_evento
+  after insert
+  ON tb_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_evento();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_evento(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_evento
+  after update
+  ON tb_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_evento();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_evento(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_evento
+  after delete
+  ON tb_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_evento();
+;
+
+create table tb_log_follow(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_follow()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_follow(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_follow
+  after insert
+  ON tb_follow
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_follow();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_follow()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_follow(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_follow
+  after update
+  ON tb_follow
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_follow();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_follow()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_follow(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_follow
+  after delete
+  ON tb_follow
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_follow();
+;
+
+create table tb_log_mascote(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_mascote()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_mascote(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_mascote
+  after insert
+  ON tb_mascote
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_mascote();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_mascote()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_mascote(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_mascote
+  after update
+  ON tb_mascote
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_mascote();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_mascote()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_mascote(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_mascote
+  after delete
+  ON tb_mascote
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_mascote();
+;
+
+create table tb_log_status_venda(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_status_venda()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_status_venda(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_status_venda
+  after insert
+  ON tb_status_venda
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_status_venda();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_status_venda()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_status_venda(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_status_venda
+  after update
+  ON tb_status_venda
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_status_venda();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_status_venda()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_status_venda(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_status_venda
+  after delete
+  ON tb_status_venda
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_status_venda();
+;
+
+create table tb_log_ticket(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_ticket()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_ticket(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_ticket
+  after insert
+  ON tb_ticket
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_ticket();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_ticket()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_ticket(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_ticket
+  after update
+  ON tb_ticket
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_ticket();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_ticket()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_ticket(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_ticket
+  after delete
+  ON tb_ticket
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_ticket();
+;
+
+create table tb_log_venda_anuncio(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_venda_anuncio()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_venda_anuncio(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_venda_anuncio
+  after insert
+  ON tb_venda_anuncio
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_venda_anuncio();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_venda_anuncio()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_venda_anuncio(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_venda_anuncio
+  after update
+  ON tb_venda_anuncio
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_venda_anuncio();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_venda_anuncio()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_venda_anuncio(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_venda_anuncio
+  after delete
+  ON tb_venda_anuncio
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_venda_anuncio();
+;
+
+create table tb_log_venda_evento(
+	dt_alteracao date,
+	var_tipo_alteracao varchar
+);
+
+CREATE OR REPLACE FUNCTION trf_log_insert_venda_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_venda_evento(dt_alteracao,var_tipo_alteracao) values(current_date,'insert');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_insert_venda_evento
+  after insert
+  ON tb_venda_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_insert_venda_evento();
+;
+  
+CREATE OR REPLACE FUNCTION trf_log_update_venda_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_venda_evento(dt_alteracao,var_tipo_alteracao) values(current_date,'update');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_update_venda_evento
+  after update
+  ON tb_venda_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_update_venda_evento();
+;
+
+CREATE OR REPLACE FUNCTION trf_log_delete_venda_evento()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_log_venda_evento(dt_alteracao,var_tipo_alteracao) values(current_date,'delete');
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_log_delete_venda_evento
+  after delete
+  ON tb_venda_evento
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_log_delete_venda_evento();
+;
+
+CREATE or replace FUNCTION trf_updatedat_tb_barraca()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_barraca
+before UPDATE ON tb_barraca
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_barraca();
+
+
+CREATE or replace FUNCTION trf_updatedat_tb_cor_araci()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_cor_araci
+before UPDATE ON tb_cor_araci
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_cor_araci();
+
+CREATE or replace FUNCTION trf_updatedat_tb_endereco()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_endereco
+before UPDATE ON tb_endereco
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_endereco();
+
+CREATE or replace FUNCTION trf_updatedat_tb_estado()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_estado
+before UPDATE ON tb_estado
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_estado();
+
+CREATE or replace FUNCTION trf_updatedat_tb_evento()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_evento
+before UPDATE ON tb_evento
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_evento();
+
+CREATE or replace FUNCTION trf_updatedat_tb_follow()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_follow
+before UPDATE ON tb_follow
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_follow();
+
+CREATE or replace FUNCTION trf_updatedat_tb_mascote()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_mascote
+before UPDATE ON tb_mascote
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_mascote();
+
+CREATE or replace FUNCTION trf_updatedat_tb_status_venda()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_status_venda
+before UPDATE ON tb_status_venda
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_status_venda();
+
+CREATE or replace FUNCTION trf_updatedat_tb_ticket()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_ticket
+before UPDATE ON tb_ticket
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_ticket();
+
+CREATE or replace FUNCTION trf_updatedat_tb_usuario()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_usuario
+before UPDATE ON tb_usuario
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_usuario();
+
+CREATE or replace FUNCTION trf_updatedat_tb_venda_anuncio()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_venda_anuncio
+before UPDATE ON tb_venda_anuncio
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_venda_anuncio();
+
+
+CREATE or replace FUNCTION trf_updatedat_tb_venda_evento()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  new.updatedAt = current_date;
+RETURN new;
+END
+$$;
+
+CREATE TRIGGER tr_updatedat_tb_venda_evento
+before UPDATE ON tb_venda_evento
+FOR EACH ROW
+EXECUTE PROCEDURE trf_updatedat_tb_venda_evento();
+
+create or replace procedure pr_venda_evento(usuario int, evento int, barraca int, qtd int)
+language plpgsql    
+as $$
+begin
+	-- procedure para relizar transações de eventos após a verificação na função
+    -- subtraindo a qtd do usuario
+    update tb_ticket 
+    set int_quant = int_quant - qtd
+    where fk_int_id_usuario = usuario and fk_int_id_evento = evento;
+
+    -- adicionando a quantidade na barraca
+    update tb_barraca
+    set int_num_tickets = int_num_tickets + qtd
+    where pk_int_id_barraca = barraca and fk_int_id_evento = evento;
+	
+	-- registrando transação
+	insert into tb_venda_evento(num_valor,fk_int_id_barraca,fk_int_id_usuario) values(qtd,barraca,usuario);
+    commit;
+end;$$
+;
+
+create or replace function fn_venda_evento(p_usuario int, p_barraca int, p_qtd int)
+returns boolean
+language plpgsql
+as
+$$
+declare
+   v_id_evento int;
+begin
+   if (select int_quant from tb_ticket where fk_int_id_usuario = p_usuario) < p_qtd then
+   		return false;
+	else
+		select fk_int_id_evento into v_id_evento from tb_barraca where pk_int_id_barraca = p_barraca;
+		call pr_venda_evento(p_usuario, v_id_evento, p_barraca, p_qtd);
+		return true;
+	end if;
+end;
+$$;
+
+CREATE OR REPLACE PROCEDURE pr_encerra_evento(p_id_evento int)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	-- soft delete no evento
+   	update tb_evento set deletedat = current_date where pk_int_id_evento = p_id_evento;
+	
+	-- soft delete nos tickets dos usuarios
+	update tb_ticket set deletedat = current_date where fk_int_id_evento = p_id_evento;
+	
+	-- soft delete nas barracas do evento
+	update tb_barraca set deletedat = current_date where fk_int_id_evento = p_id_evento;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE pr_update_status_venda(p_pk_int_id_venda_anuncio INT,p_novo_status varchar)
+LANGUAGE plpgsql
+AS $$
+declare
+	v_id_status int;
+BEGIN
+	-- Obter código status pelo nome
+	select pk_int_id_status_venda into v_id_status from tb_status_venda where var_status_venda = p_novo_status;
+    
+	if v_id_status is not null then
+		-- Atualizar o status da venda
+    	UPDATE tb_venda_anuncio
+    	SET fk_int_id_status_venda = v_id_status
+    	WHERE pk_int_id_venda_anuncio = p_pk_int_id_venda_anuncio;
+	else
+		raise exception 'Status não encontrado';
+	end if;
+END;
+$$;
+
+insert into tb_cor_araci(pk_int_id_cor_araci, var_primaria, var_secundaria, var_fundo) values(0,'006996','E45F15','32B6F4');
+
+CREATE OR REPLACE FUNCTION trf_adiciona_mascot_novo_usuario()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	insert into tb_mascote(var_nome,fk_int_id_usuario,fk_int_id_cor_araci) values('Araci',NEW.pk_int_id_usuario,0);
+	return new;
+END;
+$$
+;
+
+CREATE TRIGGER tr_adiciona_mascot_novo_usuario
+  after insert
+  ON tb_usuario
+  FOR EACH ROW
+  EXECUTE PROCEDURE trf_adiciona_mascot_novo_usuario();
+;
+
+
+insert into tb_estado(var_estado) values('AC'), ('AL'), ('AP'), ('AM'), ('BA'), ('CE'), ('DF'), ('ES'), ('GO'), ('MA'), ('MT'), ('MS'), ('MG'), ('PA'), ('PB'), ('PR'), ('PE'), ('PI'), ('RJ'), ('RN'), ('RS'), ('RO'), ('RR'), ('SC'), ('SP'), ('SE'), ('TO');
