@@ -1,17 +1,19 @@
 import os
 from datetime import datetime, timedelta, date
+from dotenv import load_dotenv
 import psycopg as pg
 import json
 
-#Lendo arquivo de config
-with open(os.path.dirname(__file__)+"/config/config.json", 'r') as file:
-    configs = json.load(file)
+
+
+#lendo .env
+load_dotenv()
 
 #Atribuindo configurações e setando variaveis
-prod1 = configs['prod1']
-prod2 = configs['prod2']
-dev1 = configs['dev1']
-dev2 = configs['dev2']
+prod1 = os.getenv['prod1']
+prod2 = os.getenv['prod2']
+dev1 = os.getenv['dev1']
+dev2 = os.getenv['dev2']
 
 hoje = date.today()
 timestampa = str(hoje)+"_"+str(datetime.now().strftime('%Hh%Mm%Ss'))
@@ -35,6 +37,11 @@ def escrevelog(texto='',pref="",cond="P"):
 
 log.write("Execução dia "+timestampa)
 
+
+#Lendo arquivo de config
+with open(os.path.dirname(__file__)+"/config/config.json", 'r') as file:
+    configs = json.load(file)
+    
 #Lendo em quais ambientes o programa será executado
 if configs['rodaPrd'] == "S" and configs['rodaDev'] == "S":
     ambs = ["prd","dev"]
