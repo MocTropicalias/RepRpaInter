@@ -10,15 +10,15 @@ import json
 load_dotenv()
 
 #Atribuindo configurações e setando variaveis
-prod1 = str(os.getenv["prod1"])
-prod2 = str(os.getenv["prod2"])
-dev1 = str(os.getenv["dev1"])
-dev2 = str(os.getenv["dev2"])
+prod1 = os.getenv("prod1")
+prod2 = os.getenv("prod2")
+dev1 = os.getenv("dev1")
+dev2 = os.getenv("dev2")
 
 hoje = date.today()
 timestampa = str(hoje)+"_"+str(datetime.now().strftime('%Hh%Mm%Ss'))
 ontem = (datetime.now() - timedelta(1)).strftime('%Y-%m-%d')
-ontem_query = "current_date-1"
+ontem_query = "current_date+1"
 
 #Criando e abrindo arquivo de log
 caminho = os.path.dirname(__file__)+"/logs/log_"+timestampa+".txt" 
