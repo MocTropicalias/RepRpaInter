@@ -18,7 +18,7 @@ dev2 = os.getenv("dev2")
 hoje = date.today()
 timestampa = str(hoje)+"_"+str(datetime.now().strftime('%Hh%Mm%Ss'))
 ontem = (datetime.now() - timedelta(1)).strftime('%Y-%m-%d')
-ontem_query = "current_date+1"
+ontem_query = "current_date-1"
 
 #Criando e abrindo arquivo de log
 caminho = os.path.dirname(__file__)+"/logs/log_"+timestampa+".txt" 
