@@ -1,8 +1,4 @@
 {
-    "prod1" : "postgres://avnadmin:AVNS_69W0O2_65jEqbsCuztW@pg-11d01e0e-testepgsql.e.aivencloud.com:24931/banco1_prod?sslmode=require",
-    "prod2" : "postgres://avnadmin:AVNS_69W0O2_65jEqbsCuztW@pg-11d01e0e-testepgsql.e.aivencloud.com:24931/banco2_prod?sslmode=require",
-    "dev1" : "postgres://avnadmin:AVNS_69W0O2_65jEqbsCuztW@pg-11d01e0e-testepgsql.e.aivencloud.com:24931/banco1_dev?sslmode=require",
-    "dev2" : "postgres://avnadmin:AVNS_69W0O2_65jEqbsCuztW@pg-11d01e0e-testepgsql.e.aivencloud.com:24931/banco2_dev?sslmode=require",
     "rodaPrd" : "N",
     "rodaDev" : "S"
     }
