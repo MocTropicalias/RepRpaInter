@@ -1,0 +1,23 @@
+# This workflow will instal Python dependencies,  tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: PipelineRPA
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Sobe do github para a aws
+      run: |
+            echo "${{secrets.AWS_RPA_INTER}}" >private_key && chmod 600 private_key
+            ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-35-172-89-76.compute-1.amazonaws.com "
+            cd RpaInterdisciplinar/;git pull;"
