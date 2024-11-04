@@ -108,7 +108,7 @@ for amb in ambs:
 
             query = "INSERT INTO tb_cor_araci(pk_int_id_cor_araci, var_fundo, var_secundaria, var_primaria, deletedAt) values "
             for i in cores:
-                query = query+"("+str(i[0])+",'"+str(i[1])+"','"+str(i[2])+"','"+str(i[3])+"',"+str(i[4])+"),"
+                query = query+"("+str(i[0])+",'"+str(i[1])+"','"+str(i[2])+"','"+str(i[3])+"','"+str(i[4])+"'),"
             query = ((query[:-1]).replace("'None'","null")).replace("None","null")
             cur2.execute(query)
             conn2.commit()
@@ -123,7 +123,7 @@ for amb in ambs:
         escrevelog("Obtendo dados da tabela tb_evento",pref=amb, cond="L")
         print(database1txt+"---->"+database2txt+" // Insert tb_evento")
 
-        cur1.execute('select dt_inicio, dt_final, var_nome, var_local, num_preco_ticket, pk_int_id_evento, fk_int_id_usuario, deletedat from tb_evento where createdAt = '+ontem_query)
+        cur1.execute('select dt_inicio, dt_final, var_nome, var_local, num_preco_ticket, pk_int_id_evento, fk_int_id_usuario, deletedat, var_imagem, var_descricao from tb_evento where createdAt = '+ontem_query)
         eventos = cur1.fetchall()
 
         #Verificando se algum novo registro foi encontrado
@@ -131,9 +131,9 @@ for amb in ambs:
             #Inserindo todos os registros encontrados no banco do 2°
             escrevelog("Inserindo registros", pref=amb)
 
-            query = "INSERT INTO tb_evento(dt_data_inicio, dt_data_final, var_nome, var_local, float_preco_ticket, pk_int_id_evento, fk_int_id_usuario, deletedat) values "
+            query = "INSERT INTO tb_evento(dt_data_inicio, dt_data_final, var_nome, var_local, float_preco_ticket, pk_int_id_evento, fk_int_id_usuario, deletedat, var_imagem, var_descricao) values "
             for i in eventos:
-                query = query+"('"+str(i[0])+"','"+str(i[1])+"','"+str(i[2])+"','"+str(i[3])+"',"+str(i[4])+","+str(i[5])+","+str(i[6])+","+str(i[7])+"),"
+                query = query+"('"+str(i[0])+"','"+str(i[1])+"','"+str(i[2])+"','"+str(i[3])+"',"+str(i[4])+","+str(i[5])+","+str(i[6])+",'"+str(i[7])+"','"+str(i[8])+"','"+str(i[9])+"'),"
             query = ((query[:-1]).replace("'None'","null")).replace("None","null")
             cur2.execute(query)
             conn2.commit()
@@ -158,7 +158,7 @@ for amb in ambs:
 
             query = "INSERT INTO tb_barraca(pk_int_id_barraca, var_nome, fk_int_id_evento, deletedAt) values "
             for i in barracas:
-                query = query+"("+str(i[0])+",'"+str(i[1])+"',"+str(i[2])+","+str(i[3])+"),"
+                query = query+"("+str(i[0])+",'"+str(i[1])+"',"+str(i[2])+",'"+str(i[3])+"'),"
             query = ((query[:-1]).replace("'None'","null")).replace("None","null")
             cur2.execute(query)
             conn2.commit()
@@ -205,7 +205,7 @@ for amb in ambs:
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
-                query = (("update tb_cor_araci set "+str(i[0])+" = "+str(i[1])+" where pk_int_id_cor_araci = "+str(i[2])).replace("'None'","null")).replace("None","null")
+                query = (("update tb_cor_araci set "+str(i[0])+" = '"+str(i[1])+"' where pk_int_id_cor_araci = "+str(i[2])).replace("'None'","null")).replace("None","null")
                 cur2.execute(query)
             conn2.commit()
             escrevelog("Alterações realizadas com sucesso",pref=amb)
@@ -219,7 +219,7 @@ for amb in ambs:
         print(database1txt+"---->"+database2txt+" // Update evento")
 
     
-        cur1.execute('select pk_int_id_evento, dt_inicio, dt_final, var_nome, var_local, num_preco_ticket, deletedat, fk_int_id_usuario from tb_evento where tb_evento.updateat ='+ontem_query+' order by pk_int_id_evento')
+        cur1.execute('select pk_int_id_evento, dt_inicio, dt_final, var_nome, var_local, num_preco_ticket, deletedat, fk_int_id_usuario, var_imagem, var_descricao from tb_evento where tb_evento.updateat ='+ontem_query+' order by pk_int_id_evento')
         eventos = cur1.fetchall()
 
         #Verificando se algum novo registro foi encontrado
@@ -227,9 +227,9 @@ for amb in ambs:
             escrevelog("Obtendo os registros equivalentes do banco do 2°",pref=amb)
 
 
-            lista_cols = ["dt_data_inicio", "dt_data_final", "var_nome", "var_local", "float_preco_ticket", "deletedat", "fk_int_id_usuario"]
+            lista_cols = ["dt_data_inicio", "dt_data_final", "var_nome", "var_local", "float_preco_ticket", "deletedat", "fk_int_id_usuario", "var_imagem","var_descricao"]
             lista_mods = []
-            querySelect = "select dt_data_inicio, dt_data_final, var_nome, var_local, float_preco_ticket, deletedat, fk_int_id_usuario from tb_evento where pk_int_id_evento in ("
+            querySelect = "select dt_data_inicio, dt_data_final, var_nome, var_local, float_preco_ticket, deletedat, fk_int_id_usuario, var_imagem, var_descricao from tb_evento where pk_int_id_evento in ("
             for i in eventos:
                 querySelect = querySelect+str(i[0])+","
             querySelect = (querySelect[:-1])+") order by pk_int_id_evento"
