@@ -201,7 +201,7 @@ for amb in ambs:
             for i in range(0,len(cores2)):
                 for c in range(0,len(cores2[i])):
                     if cores2[i][c] != cores[i][c+1]:
-                        lista_mods.append([lista_cols[c],cores[i][c+1],cores2[i][0]])
+                        lista_mods.append([lista_cols[c],cores[i][c+1],cores[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -243,9 +243,9 @@ for amb in ambs:
                 for c in range(0,len(eventos2[i])):
                     if eventos2[i][c] != eventos[i][c+1]:
                         if c in [4,6]:
-                            lista_mods.append([lista_cols[c],eventos[i][c+1],eventos2[i][0]])
+                            lista_mods.append([lista_cols[c],eventos[i][c+1],eventos[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(eventos[i][c+1])+"'",eventos2[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(eventos[i][c+1])+"'",eventos[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -287,9 +287,9 @@ for amb in ambs:
                 for c in range(0,len(barracas2[i])):
                     if barracas2[i][c] != barracas[i][c+1]:
                         if c == 2:
-                            lista_mods.append([lista_cols[c],barracas[i][c+1],barracas2[i][0]])
+                            lista_mods.append([lista_cols[c],barracas[i][c+1],barracas[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(barracas[i][c+1])+"'",barracas2[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(barracas[i][c+1])+"'",barracas[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -527,9 +527,9 @@ for amb in ambs:
                 for c in range(0,len(enderecos[i])):
                     if enderecos[i][c] != enderecos2[i][c+1]:
                         if c == 5:
-                            lista_mods.append([lista_cols[c],enderecos2[i][c+1],enderecos[i][0]])
+                            lista_mods.append([lista_cols[c],enderecos2[i][c+1],enderecos2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(enderecos2[i][c+1])+"'",enderecos[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(enderecos2[i][c+1])+"'",enderecos2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -571,9 +571,9 @@ for amb in ambs:
                 for c in range(0,len(usuarios[i])):
                     if usuarios[i][c] != usuarios2[i][c+1]:
                         if c == 9:
-                            lista_mods.append([lista_cols[c],usuarios2[i][c+1],usuarios[i][0]])
+                            lista_mods.append([lista_cols[c],usuarios2[i][c+1],usuarios2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(usuarios2[i][c+1])+"'",usuarios[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(usuarios2[i][c+1])+"'",usuarios2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -615,9 +615,9 @@ for amb in ambs:
                 for c in range(0,len(anuncios[i])):
                     if anuncios[i][c] != anuncios2[i][c+1]:
                         if c in [2,4,7]:
-                            lista_mods.append([lista_cols[c],anuncios2[i][c+1],anuncios[i][0]])
+                            lista_mods.append([lista_cols[c],anuncios2[i][c+1],anuncios2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(anuncios2[i][c+1])+"'",anuncios[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(anuncios2[i][c+1])+"'",anuncios2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -660,9 +660,9 @@ for amb in ambs:
                 for c in range(0,len(mascotes[i])):
                     if mascotes[i][c] != mascotes2[i][c+1]:
                         if c in [0,1]:
-                            lista_mods.append([lista_cols[c],mascotes2[i][c+1],mascotes[i][0]])
+                            lista_mods.append([lista_cols[c],mascotes2[i][c+1],mascotes2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(mascotes2[i][c+1])+"'",mascotes[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(mascotes2[i][c+1])+"'",mascotes2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -704,9 +704,9 @@ for amb in ambs:
                 for c in range(0,len(follows[i])):
                     if follows[i][c] != follows2[i][c+1]:
                         if c in [0,1]:
-                            lista_mods.append([lista_cols[c],follows2[i][c+1],follows[i][0]])
+                            lista_mods.append([lista_cols[c],follows2[i][c+1],follows2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(follows2[i][c+1])+"'",follows[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(follows2[i][c+1])+"'",follows2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -748,9 +748,9 @@ for amb in ambs:
                 for c in range(0,len(tickets[i])):
                     if tickets[i][c] != tickets2[i][c+1]:
                         if c in [0,1,2]:
-                            lista_mods.append([lista_cols[c],tickets2[i][c+1],tickets[i][0]])
+                            lista_mods.append([lista_cols[c],tickets2[i][c+1],tickets2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(tickets2[i][c+1])+"'",tickets[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(tickets2[i][c+1])+"'",tickets2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
@@ -792,9 +792,9 @@ for amb in ambs:
                 for c in range(0,len(vendas_evento[i])):
                     if vendas_evento[i][c] != vendas_evento2[i][c+1]:
                         if c in [0,1,2]:
-                            lista_mods.append([lista_cols[c],vendas_evento2[i][c+1],vendas_evento[i][0]])
+                            lista_mods.append([lista_cols[c],vendas_evento2[i][c+1],vendas_evento2[i][0]])
                         else:
-                            lista_mods.append([lista_cols[c],"'"+str(vendas_evento2[i][c+1])+"'",vendas_evento[i][0]])
+                            lista_mods.append([lista_cols[c],"'"+str(vendas_evento2[i][c+1])+"'",vendas_evento2[i][0]])
             
             escrevelog("Realizando alterações",pref=amb)
             for i in lista_mods:
