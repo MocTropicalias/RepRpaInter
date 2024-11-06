@@ -78,6 +78,8 @@ CREATE TABLE tb_evento
  pk_int_id_evento serial PRIMARY KEY,  
  dt_data_final DATE,  
  updatedAt date,
+ var_imagem varchar,
+ var_descricao varchar,
  fk_int_id_usuario INT  
 ); 
 

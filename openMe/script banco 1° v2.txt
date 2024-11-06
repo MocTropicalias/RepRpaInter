@@ -36,7 +36,7 @@ CREATE TABLE tb_endereco (
 	var_cidade VARCHAR(100),  	
 	pk_int_id_endereco SERIAL PRIMARY KEY,  
 	var_complemento VARCHAR(255),  
-	int_num_casa INT CHECK (int_num_casa > 0), 
+	int_num_casa INT, 
 	createdAt DATE DEFAULT CURRENT_DATE,  
 	deletedAt DATE,  
 	updateAt DATE 
@@ -82,11 +82,13 @@ CREATE TABLE tb_evento (
 	deletedAt DATE,  
 	pk_int_id_evento SERIAL PRIMARY KEY,  
 	fk_int_id_usuario INT,  
+	var_imagem varchar,
+	var_descricao varchar,
 	updateAt DATE
 ); 
 
 CREATE TABLE tb_ticket ( 
-	int_quant INT CHECK (int_quant > 0),  
+	int_quant INT,  
 	pk_int_id_ticket SERIAL PRIMARY KEY,  
 	createdAt DATE DEFAULT CURRENT_DATE,  
 	deletedAt DATE,  
@@ -126,6 +128,6 @@ ALTER TABLE tb_ticket ADD FOREIGN KEY(fk_int_id_evento) REFERENCES tb_evento (pk
 ALTER TABLE tb_venda_evento ADD FOREIGN KEY(fk_int_id_barraca) REFERENCES tb_barraca (pk_int_id_barraca);
 ALTER TABLE tb_venda_evento ADD FOREIGN KEY(fk_int_id_usuario) REFERENCES tb_usuario (pk_int_id_usuario);
 ALTER TABLE tb_barraca ADD FOREIGN KEY(fk_int_id_evento) REFERENCES tb_evento (pk_int_id_evento);
-
+ 
 
 insert into tb_cor_mascote(pk_int_id_cor_mascote, text_primaria, text_secundaria, text_fundo, createdAt) values(0,'006996','E45F15','32B6F4',current_date-1);
